@@ -1,0 +1,289 @@
+
+[meta title:"Dummy" description:"Short description of your project" /]
+
+[Header
+  fullWidth:true
+  title:"Dummy"
+  subtitle:"Welcome to Idyll. Open index.idyll to start writing"
+  author:"Your Name Here"
+  authorLink:"https://idyll-lang.org"
+  date:"Apr 24, 2023"
+  background:"#222222"
+  color:"#ffffff"
+   /]
+
+[var name:"x" value:0 /]
+
+## Introduction
+
+This is an Idyll post. It is generated via
+the file `index.idyll`. To compile this post using
+idyll, run the command `idyll` inside of this directory.
+
+
+Idyll posts are designed to support interaction and
+data-driven graphics.
+
+[var name:"state" value:0 /]
+[CustomD3Component className:"d3-component" state:state /]
+[button onClick:`state++`]
+  Click Me.
+[/button]
+
+Configuration can be done via the `idyll` field in `package.json`.
+
+
+## Components
+
+Components can be embedded using a bracket syntax:
+
+```
+[Range /]
+```
+
+and can contain nested content:
+
+```
+[Equation]e = mc^{2}[/Equation]
+```
+
+Components accept properties:
+
+```
+[Range value:x min:0 max:1 /]
+```
+
+that can be bound to variables to achieve interactivity (more in next section).
+
+
+A variety of components are included by default. See [all the available components](https://idyll-lang.org/docs/components/). You can also use any html tag, for example: `[div] A div! [/div]`.
+
+To create your own, add it to the `components/` folder. There are examples of how to use Idyll with React and D3 based components already included.
+
+
+
+## Interactivity
+
+Here is how you can instantiate a variable and bind it to a component:
+
+[var name:"exampleVar" value:5 /]
+
+[Range min:0 max:10 value:exampleVar /]
+[Display value:exampleVar /]
+
+```
+[var name:"exampleVar" value:5 /]
+
+[Range min:0 max:10 value:exampleVar /]
+[Display value:exampleVar /]
+```
+
+## Learn More
+
+To learn more see the documentation at [https://idyll-lang.org/docs/](https://idyll-lang.org/docs/),
+join our [chatroom](https://gitter.im/idyll-lang/Lobby), or see the project on [GitHub](https://github.com/idyll-lang/idyll).
+
+[hr /]
+
+# Technical Details
+
+## Installation
+
+- Make sure you have `idyll` installed (`npm i -g idyll`).
+- Clone this repo and run `npm install`.
+
+## Developing a post locally
+
+Run `idyll`.
+
+## Building a post for production
+
+Run `idyll build`. The output will appear in the top-level `build` folder. To change the output location, change the `output` option in `package.json`.
+
+## Deploying
+
+Make sure your post has been built, then deploy the docs folder via any static hosting service.
+
+## Dependencies
+
+You can install custom dependencies by running `npm install <package-name> --save`. Note that any collaborators will also need download the package locally by running `npm install` after pulling the changes.
+
+
+
+
+
+# Welcome!
+
+## This application helps you compose Idyll documents.
+
+Type in the textbox on the left, and the output on the right will update. If you want to save your changes, hit the "Save" button that appears in the lower right corner, and a unique URL will be generated. To view your post, click "Fullscreen."
+
+## Aliasing 
+[var name:"func" value:`Math.sin` /]
+[var name:"domainStart" value:0 /]
+[var name:"domainEnd" value:`2 * Math.PI` /]
+[Chart
+  equation:` (t) => func(t)`
+  domain:`[0, domainEnd]`
+  samplePoints:100 /]
+
+
+End: [Range value:domainEnd min:0 max:`100* Math.PI` step:0.01 /]
+
+ 
+## Change Frequency
+
+[var name:"func" value:`Math.sin` /]
+[var name:"rad" value:`2*Math.PI` /]
+[var name:"freq" value:0 /]
+
+[var name:"start" value:0/]
+[var name:"stop" value:10/]
+
+[Chart
+  equation:` (t) => func(rad*t*freq*(1/stop))`
+  domain:`[start, stop]`
+  samplePoints:1000 /]
+
+
+####Frequency 
+[Range value:freq min:0 max:20 step:1 /] 
+Sinusoid that makes [Display value:freq format:"d" /] cycles over [Display value:stop format:"d" /] seconds
+
+
+
+### Toggling Frequencies
+[var name:"func" value:`Math.sin` /]
+[var name:"rad" value:`2*Math.PI` /]
+[var name:"freq_new" value:0 /]
+
+[var name:"start" value:0/]
+[var name:"stop" value:10/]
+
+[var name:"equation" value:`(t) => func(rad*t*freq_new*(1/stop)) + func(rad*t*freq_new*(1/stop))`/]
+
+[Chart
+  equation:equation
+  domain:`[start, stop]`
+  samplePoints:1000 /]
+
+[Range value:freq_new min:0 max:20 step:1 /] 
+Sinusoid that makes [Display value:freq_new format:"d" /] cycles over [Display value:stop format:"d" /] seconds
+
+[var name:"freq_high" value:false /]
+
+
+[Loop value:`['one', 'two', 'three']`]
+  [var name:"_iterator" value:0/]
+  Frequency [Display value:"_iterator" format:"d" /] Hz [br/]
+
+  [Range value:"_iterator" min:0 max:20 step:1 /] 
+
+[/Loop]
+
+
+
+# A custom React component
+
+[var name:"eq1_freq" value:1 /]
+[var name:"eq2_freq" value:1 /]
+[var name:"eq3_freq" value:1 /]
+
+
+Frequencies: [br/]
+
+[Range value:eq1_freq min:0 max:`8*Math.PI` /]
+[Display value:eq1_freq/]
+
+[br/]
+
+[Range value:eq2_freq min:0 max:`8*Math.PI` /]
+[Display value:eq2_freq/]
+
+[br/]
+
+[Range value:eq3_freq min:0 max:`8*Math.PI` /]
+[Display value:eq3_freq/]
+
+
+
+
+[var name:"eq1" value: `(t) => Math.sin(t*2*Math.PI* eq1_freq *(1/10))` /]
+[var name:"eq2" value: `(t) => Math.sin(t*4*Math.PI*eq1_freq*(1/10))` /]
+[var name:"eq3" value: `(t) => Math.sin(t*4*Math.PI*eq3_freq*(1/10))` /]
+
+
+
+[CustomComponent 
+  width: 800
+  height: 800
+  margin: `{top: 20, right: 30, bottom: 30, left: 20}`
+  equations: `[(t) => Math.sin(t*2*Math.PI* eq1_freq *(1/10)),(t) => Math.sin(t*4*Math.PI* eq2_freq *(1/10)), (t) => Math.sin(t*2*Math.PI* eq3_freq *(1/10)), (t) => Math.sin(t*2*Math.PI* eq1_freq *(1/10)) + Math.sin(t*2*Math.PI* eq2_freq *(1/10)) + Math.sin(t*2*Math.PI* eq3_freq *(1/10)) ]` 
+  domain: `[0, 10]`
+  range: `[-5, 5]`
+/]
+
+
+
+# Custom Frequency Sliders
+
+[var name:"freq_1" value:1 /]
+
+[var name:"freq_2" value:2 /]
+
+[var name:"freq_3" value:3 /]
+
+[div style:`{position:'relative', zIndex:100}`]
+  [Range min:0 max:6 value:freq_1 step:0.1 /]
+  [Display value:freq_1 /]
+  Controls frequency 1
+[/div]
+
+[div style:`{position:'relative', zIndex:100}`]
+  [Range min:0 max:6 value:freq_2 step:0.1 /]
+  [Display value:freq_2 /]
+  Controls frequency 2
+[/div]
+
+[div style:`{position:'relative', zIndex:100}`]
+  [Range min:0 max:6 value:freq_3 step:0.1 /]
+  [Display value:freq_3 /]
+  Controls frequency 3
+[/div]
+
+[var name:"freq_1_amplitude" value:1 /]
+
+[var name:"freq_2_amplitude" value:1 /]
+
+[var name:"freq_3_amplitude" value:1 /]
+
+[div style:`{position:'relative', zIndex:100}`]
+  [Range min:0 max:10 value:freq_1_amplitude step:0.1 /]
+  [Display value:freq_1_amplitude /]
+  Controls the amplitude of frequency 1
+[/div]
+
+[div style:`{position:'relative', zIndex:100}`]
+  [Range min:0 max:10 value:freq_2_amplitude step:0.1 /]
+  [Display value:freq_2_amplitude /]
+  Controls the amplitude of frequency 2
+[/div]
+
+[div style:`{position:'relative', zIndex:100}`]
+  [Range min:0 max:10 value:freq_3_amplitude step:0.1 /]
+  [Display value:freq_3_amplitude /]
+  Controls the amplitude of frequency 3
+[/div]
+
+[var name:"func" value:`Math.sin` /]
+[var name:"domainStart" value:0 /]
+[var name:"domainEnd" value:`2 * Math.PI` /]
+[var name:"rangeStart" value:-10 /] 
+[var name:"rangeEnd" value:`10` /]
+
+[Chart
+  equation:` (t) => freq_1_amplitude*func(freq_1*t) + freq_2_amplitude*func(freq_2*t) + freq_3_amplitude*func(freq_3*t)`
+  domain:`[domainStart, domainEnd]`
+  range:`[rangeStart, rangeEnd]`
+  theme:"material"
+  samplePoints:1000 /]
